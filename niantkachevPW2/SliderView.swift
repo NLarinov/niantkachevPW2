@@ -50,7 +50,7 @@ final class CustomSlider: UIView {
     
     // MARK: - UI Setup
     private func configureUI() {
-        backgroundColor = .white
+        backgroundColor = .systemBackground
         translatesAutoresizingMaskIntoConstraints = false
         
         for view in [titleLabel, valueLabel, slider] {

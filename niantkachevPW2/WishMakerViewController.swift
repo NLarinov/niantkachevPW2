@@ -14,9 +14,9 @@ final class WishMakerViewController: UIViewController {
         static let titleTopPadding: CGFloat = 30
         static let descriptionTopPadding: CGFloat = 20
         static let horizontalPadding: CGFloat = 20
-        static let stackBottomPadding: CGFloat = 40
         static let stackSpacing: CGFloat = 16
         static let stackCornerRadius: CGFloat = 20
+        static let stackTopPadding: CGFloat = 24
         
         static let titleFontSize: CGFloat = 32
         static let descriptionFontSize: CGFloat = 18
@@ -24,6 +24,10 @@ final class WishMakerViewController: UIViewController {
         static let segmentTopPadding: CGFloat = 20
         static let buttonTopPadding: CGFloat = 12
         static let buttonHeight: CGFloat = 44
+        static let addWishButtonText: String = "Write Down Wish"
+        static let addWishButtonBottomPadding: CGFloat = 40
+        static let addWishButtonHorizontalPadding: CGFloat = 24
+        static let addWishButtonCornerRadius: CGFloat = 22
     }
     
     // MARK: - UI Components
@@ -46,6 +50,7 @@ final class WishMakerViewController: UIViewController {
     }()
     
     private let stack = UIStackView()
+    private let addWishButton: UIButton = UIButton(type: .system)
     
     private let sliderRed = CustomSlider(title: "Red", min: 0, max: 1)
     private let sliderGreen = CustomSlider(title: "Green", min: 0, max: 1)
@@ -60,6 +65,7 @@ final class WishMakerViewController: UIViewController {
         configureDescription()
         configureSegmentedControl()
         configureButton()
+        configureAddWishButton()
         configureSliders()
         setupSliderBindings()
         setupActions()
@@ -116,6 +122,24 @@ final class WishMakerViewController: UIViewController {
         ])
     }
     
+    // MARK: - Add Wish Button
+    private func configureAddWishButton() {
+        addWishButton.translatesAutoresizingMaskIntoConstraints = false
+        addWishButton.backgroundColor = .white
+        addWishButton.setTitleColor(.systemPink, for: .normal)
+        addWishButton.setTitle(Constants.addWishButtonText, for: .normal)
+        addWishButton.layer.cornerRadius = Constants.addWishButtonCornerRadius
+        addWishButton.addTarget(self, action: #selector(addWishButtonPressed), for: .touchUpInside)
+        
+        view.addSubview(addWishButton)
+        NSLayoutConstraint.activate([
+            addWishButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.addWishButtonHorizontalPadding),
+            addWishButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.addWishButtonHorizontalPadding),
+            addWishButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -Constants.addWishButtonBottomPadding),
+            addWishButton.heightAnchor.constraint(equalToConstant: Constants.buttonHeight)
+        ])
+    }
+    
     // MARK: - Sliders
     private func configureSliders() {
         stack.axis = .vertical
@@ -132,7 +156,8 @@ final class WishMakerViewController: UIViewController {
         NSLayoutConstraint.activate([
             stack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             stack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.horizontalPadding),
-            stack.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -Constants.stackBottomPadding)
+            stack.topAnchor.constraint(equalTo: toggleButton.bottomAnchor, constant: Constants.stackTopPadding),
+            stack.bottomAnchor.constraint(equalTo: addWishButton.topAnchor, constant: -Constants.stackTopPadding)
         ])
     }
     
@@ -186,6 +211,13 @@ final class WishMakerViewController: UIViewController {
             )
         default: break
         }
+    }
+    
+    @objc
+    private func addWishButtonPressed() {
+        let storingController = WishStoringViewController()
+        storingController.modalPresentationStyle = .pageSheet
+        present(storingController, animated: true)
     }
 }
 
